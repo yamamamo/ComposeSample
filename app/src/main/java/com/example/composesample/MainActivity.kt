@@ -22,15 +22,20 @@ class MainActivity : ComponentActivity() {
             //기존 뷰 시스템에서 하던 것처럼 xml파일을 사용하는 대신 이 함수에서
             //구성가능한 함수를 호출합니다.
             ComposeSampleTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                MyApp(modifier = Modifier.fillMaxSize())
             }
         }
+    }
+}
+
+//컴포저블 재사용
+@Composable
+private fun MyApp(modifier: Modifier){
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background
+    ){
+        Greeting("Android")
     }
 }
 
@@ -46,10 +51,10 @@ fun Greeting(name: String) {
     }
 }
 
-@Preview(showBackground = true, name = "Text preview")
+@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ComposeSampleTheme {
-        Greeting(name = "Android")
+        MyApp(modifier = Modifier.fillMaxSize())
     }
 }
