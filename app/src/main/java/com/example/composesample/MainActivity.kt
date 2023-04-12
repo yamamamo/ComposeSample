@@ -3,11 +3,15 @@ package com.example.composesample
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +36,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MyApp(modifier: Modifier = Modifier)
 {
-    var shouldShowOnboarding by remember { mutableStateOf(true)}
+//    var shouldShowOnboarding by remember { mutableStateOf(true)}
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true)}
 
     Surface(modifier) {
         if(shouldShowOnboarding){
@@ -64,8 +69,14 @@ fun Greeting(name: String) {
     //데이터가 변경되면 컴포즈는 새 데이터로 이러한 함수를 다시 실행하여 업데이트된 ui를 만듭니다.
     //remember 는 리컴포지션을 방지하는 데 사용되므로 상태가 재설정되지 않습니다.
     val expanded = remember{ mutableStateOf(false)}
-    val extraPadding = if(expanded.value) 48.dp else 0.dp
 
+    val extraPadding by animateDpAsState(
+        if(expanded.value) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
@@ -81,7 +92,7 @@ fun Greeting(name: String) {
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(bottom = extraPadding)
+                    .padding(bottom = extraPadding.coerceAtLeast(5.dp))
             ) {
                 Text(text = "Hello,")
                 Text(text = name)
