@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +45,12 @@ private fun MyApp(
 
 @Composable
 fun Greeting(name: String) {
+    //리컴포지션 - 컴포즈앱은 구성 가능한 함수를 호출하여 데이터를 ui로 변환합니다.
+    //데이터가 변경되면 컴포즈는 새 데이터로 이러한 함수를 다시 실행하여 업데이트된 ui를 만듭니다.
+    //remember 는 리컴포지션을 방지하는 데 사용되므로 상태가 재설정되지 않습니다.
+    val expanded = remember{ mutableStateOf(false)}
+    val extraPadding = if(expanded.value) 48.dp else 0.dp
+
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
@@ -56,13 +64,17 @@ fun Greeting(name: String) {
 
         Row(modifier = Modifier.padding(24.dp)){
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = extraPadding)
             ) {
                 Text(text = "Hello,")
                 Text(text = name)
             }
-            ElevatedButton(onClick = { /*TODO*/ }) {
-                Text(text = "Sow more")
+            ElevatedButton(
+                onClick = { expanded.value = !expanded.value  }
+            ) {
+                Text(if(expanded.value) "하이하이" else "아니하이")
             }
         }
     }
