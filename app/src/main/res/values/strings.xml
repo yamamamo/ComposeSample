@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ComposeSample</string>
+    <string name="hi_hi">하이하이</string>
+    <string name="no_hi">아니하이</string>
+    <string name="glad_easy_codelab">반갑다는 기초 코드랩</string>
+    <string name="ccontinue">께속</string>
 </resources>
